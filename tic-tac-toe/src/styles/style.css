@@ -1,41 +1,10 @@
 /* Import CSS Files */
 
-@import 'tailwindcss';
-
+@import "tailwindcss";
 
 :root {
-    
-}
-
-
-html {
-    scroll-behavior: smooth;
-    @apply bg-zinc-900 text-zinc-50;
 }
 
 body {
-    /* Choose default font family */
-    @apply font-sans mb-20;
-    
-}
-
-.title {
-    @apply flex items-center justify-center text-6xl font-extrabold text-white mt-10 mb-10;
-}
-
-.ttt-grid-bg {
-    @apply flex justify-center items-center;
-}
-
-.ttt-grid {
-    user-select: none;
-    @apply grid grid-cols-3 gap-0 w-[500px] h-[500px] border-[6px] border-gray-500;
-}
-
-.ttt-grid-cell {
-    @apply flex items-center justify-center border-4 border-gray-500 text-6xl font-bold text-black bg-slate-100;
-}
-
-.footer {
-    @apply flex items-center justify-center text-2xl text-white mt-10 font-bold ;
+    scroll-behavior: smooth;
 }

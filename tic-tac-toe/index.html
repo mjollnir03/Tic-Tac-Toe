@@ -1,36 +1,104 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <!--CHANGE ICON LATER-->
-    <link rel="icon" type="image/svg+xml" href="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tic Tac Toe</title>
-</head>
-<body >
-    <div class="title">Tic Tac Toe</div>
-        
-    <!-- Tic Tac Toe Grid -->
-    <div class="ttt-grid-bg">
-        <div class="ttt-grid">
-            <div class="ttt-grid-cell">X</div>
-            <div class="ttt-grid-cell">X</div>
-            <div class="ttt-grid-cell">X</div>
-            <div class="ttt-grid-cell">X</div>
-            <div class="ttt-grid-cell">X</div>
-            <div class="ttt-grid-cell">X</div>
-            <div class="ttt-grid-cell">X</div>
-            <div class="ttt-grid-cell">X</div>
-            <div class="ttt-grid-cell">X</div>
-        </div>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Tic Tac Toe</title>
+        <script type="module" src="/src/main.ts" defer></script>
+    </head>
 
-    </div>
+    <body class="min-h-screen bg-zinc-900 text-zinc-50 font-sans flex flex-col">
+        <!-- HEADER -->
+        <h1
+            id="title"
+            class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-center py-4"
+        >
+            Tic Tac Toe
+        </h1>
 
+        <!-- MAIN CONTENT -->
+        <main
+            class="flex-grow flex flex-col items-center justify-center px-4 space-y-4"
+        >
+            <!-- SCORE BOARD -->
+            <div
+                id="score-board"
+                class="text-2xl md:text-3xl lg:text-4xl font-semibold"
+            >
+                Sample Text
+            </div>
 
-    <div class="footer"> Ellmaer Ranjber </div>
-    
-    <script type="module" src="/src/main.ts"></script>
-</body>
+            <!-- GRID -->
+            <div id="ttt-grid-bg" class="flex justify-center items-center">
+                <div
+                    id="ttt-grid"
+                    class="grid grid-cols-3 gap-0 w-[85vw] max-w-[400px] aspect-square border-[6px] border-gray-500"
+                >
+                    <!-- 9 cells -->
+                    <div
+                        class="flex items-center justify-center border-4 border-gray-500 bg-slate-100 text-black text-3xl md:text-5xl font-bold"
+                    >
+                        X
+                    </div>
+                    <div
+                        class="flex items-center justify-center border-4 border-gray-500 bg-slate-100 text-black text-3xl md:text-5xl font-bold"
+                    >
+                        X
+                    </div>
+                    <div
+                        class="flex items-center justify-center border-4 border-gray-500 bg-slate-100 text-black text-3xl md:text-5xl font-bold"
+                    >
+                        X
+                    </div>
+                    <div
+                        class="flex items-center justify-center border-4 border-gray-500 bg-slate-100 text-black text-3xl md:text-5xl font-bold"
+                    >
+                        X
+                    </div>
+                    <div
+                        class="flex items-center justify-center border-4 border-gray-500 bg-slate-100 text-black text-3xl md:text-5xl font-bold"
+                    >
+                        X
+                    </div>
+                    <div
+                        class="flex items-center justify-center border-4 border-gray-500 bg-slate-100 text-black text-3xl md:text-5xl font-bold"
+                    >
+                        X
+                    </div>
+                    <div
+                        class="flex items-center justify-center border-4 border-gray-500 bg-slate-100 text-black text-3xl md:text-5xl font-bold"
+                    >
+                        X
+                    </div>
+                    <div
+                        class="flex items-center justify-center border-4 border-gray-500 bg-slate-100 text-black text-3xl md:text-5xl font-bold"
+                    >
+                        X
+                    </div>
+                    <div
+                        class="flex items-center justify-center border-4 border-gray-500 bg-slate-100 text-black text-3xl md:text-5xl font-bold"
+                    >
+                        X
+                    </div>
+                </div>
+            </div>
+
+            <!-- RETRY BUTTON -->
+            <button
+                id="retry"
+                class="bg-rose-500 hover:bg-emerald-500 transition duration-500 text-white px-10 py-4 rounded-xl text-2xl md:text-3xl font-bold"
+            >
+                Retry
+            </button>
+        </main>
+
+        <!-- FOOTER -->
+        <footer
+            id="footer"
+            class="text-center text-base md:text-lg lg:text-xl font-bold py-4"
+        >
+            Ellmaer Ranjber
+        </footer>
+    </body>
 </html>
-
-
