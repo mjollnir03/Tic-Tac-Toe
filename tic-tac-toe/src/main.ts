@@ -2,10 +2,12 @@
 import "../node_modules/modern-normalize/modern-normalize.css";
 import "./styles/style.css";
 
-const cells = document.querySelectorAll<HTMLDivElement>(".ttt-grid-cell");
+const ttt_grid = document.querySelector<HTMLDivElement>("#ttt-grid");
 
-cells.forEach((cell) => {
+if(ttt_grid){
+ttt_grid.querySelectorAll<HTMLDivElement>('div').forEach((cell) => {
     cell.addEventListener("click", () => {
         cell.innerHTML = cell.innerHTML.trim() === "X" ? "O" : "X";
     });
 });
+}
