@@ -3,4 +3,5 @@ Verse against an unbeatable AI in Tic-Tac-Toe.
 
 
 ### Temp Preview of App (Work in Progress)
-<img width="971" height="908" alt="image" src="https://github.com/user-attachments/assets/ab3a4f52-247b-4a82-98d6-c65b40e21924" />
+<img width="600"  alt="image" src="https://github.com/user-attachments/assets/35256a39-1bfa-4bde-9b23-1decbf9305ce" />
+
