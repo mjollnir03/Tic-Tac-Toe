@@ -1,13 +1,14 @@
-
-import './App.css'
+import "./App.css";
 
 function App() {
-
-  return (
-    <>
-      <h1>HELLO</h1>
-    </>
-  )
+    return (
+        <>
+            <div className="header">
+                <p className="title">Tic Tac Toe</p>
+                <p className="rules">Rules</p>
+            </div>
+        </>
+    );
 }
 
-export default App
+export default App;

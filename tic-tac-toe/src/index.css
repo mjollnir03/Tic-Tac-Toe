@@ -1,0 +1,15 @@
+
+:root {
+    --bg-color: #171717;
+    --txt-color: #F8FAFC;
+    --txt-won-color: #4ADE80;
+    /* --txt-lost-color: (TBD); */
+
+}
+
+* {
+    background-color: var(--bg-color);
+    color: var(--txt-color);
+    font-family: sans-serif; /* Change Later -> Inter */
+
+}
