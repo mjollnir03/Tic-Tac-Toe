@@ -1,117 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Tic Tac Toe</title>
-        <script type="module" src="/src/main.ts" defer></script>
-    </head>
-
-    <body class="min-h-screen bg-zinc-900 text-zinc-50 font-sans flex flex-col">
-        <!-- HEADER -->
-        <h1
-            id="title"
-            class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-center py-4"
-        >
-            Tic Tac Toe
-        </h1>
-
-        <!-- MAIN CONTENT -->
-        <main
-            class="flex-grow flex flex-col items-center justify-center px-4 space-y-4"
-        >
-            <!-- Wrapper for Scoreboard and Grid -->
-            <div class="w-[85vw] max-w-[400px] mx-auto flex flex-col space-y-4">
-                <!-- SCORE BOARD -->
-                <div
-                    id="score-board"
-                    class="flex justify-between items-center w-full text-2xl md:text-3xl lg:text-4xl font-semibold"
-                >
-                    <span>
-                        <span class="text-amber-500">PLAYER:</span>
-                        <span id="player-letter">X</span>
-                    </span>
-                    <span>
-                        <span class="text-cyan-400">BOT:</span>
-                        <span id="ai-letter">O</span>
-                    </span>
-                </div>
-
-                <!-- GRID -->
-                <div
-                    id="ttt-grid-bg"
-                    class="flex justify-center items-center bg-zinc-700"
-                >
-                    <div
-                        id="ttt-grid"
-                        class="grid grid-cols-3 gap-0 w-[85vw] max-w-[400px] aspect-square border-[3px] md:border-[6px] border-zinc-700"
-                    >
-                        <!-- 9 cells -->
-                        <div
-                            class="flex items-center justify-center m-1 bg-slate-100 text-black text-4xl md:text-5xl font-bold"
-                        >
-                            O
-                        </div>
-                        <div
-                            class="flex items-center justify-center m-1 bg-slate-100 text-black text-4xl md:text-5xl font-bold"
-                        >
-                            X
-                        </div>
-                        <div
-                            class="flex items-center justify-center m-1 bg-slate-100 text-black text-4xl md:text-5xl font-bold"
-                        >
-                            O
-                        </div>
-                        <div
-                            class="flex items-center justify-center m-1 bg-slate-100 text-black text-4xl md:text-5xl font-bold"
-                        >
-                            X
-                        </div>
-                        <div
-                            class="flex items-center justify-center m-1 bg-slate-100 text-black text-4xl md:text-5xl font-bold"
-                        >
-                            O
-                        </div>
-                        <div
-                            class="flex items-center justify-center m-1 bg-slate-100 text-black text-4xl md:text-5xl font-bold"
-                        >
-                            X
-                        </div>
-                        <div
-                            class="flex items-center justify-center m-1 bg-slate-100 text-black text-4xl md:text-5xl font-bold"
-                        >
-                            O
-                        </div>
-                        <div
-                            class="flex items-center justify-center m-1 bg-slate-100 text-black text-4xl md:text-5xl font-bold"
-                        >
-                            X
-                        </div>
-                        <div
-                            class="flex items-center justify-center m-1 bg-slate-100 text-black text-4xl md:text-5xl font-bold"
-                        >
-                            O
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RETRY BUTTON -->
-            <button
-                id="retry"
-                class="bg-indigo-500 ease-in-out hover:scale-110 transition-transform duration-500 text-slate-50 px-10 py-4 rounded-xl text-2xl md:text-3xl font-bold"
-            >
-                Retry
-            </button>
-        </main>
-
-        <!-- FOOTER -->
-        <footer
-            id="footer"
-            class="text-center text-base md:text-lg lg:text-xl font-bold py-4"
-        >
-            Ellmaer Ranjber
-        </footer>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
