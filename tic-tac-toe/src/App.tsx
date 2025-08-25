@@ -20,9 +20,7 @@ function App() {
                     </div>
 
                     {/* Board */}
-                    <div className="border-4 border-[#F8FAFC] w-[90vw] max-w-[480px] aspect-square flex items-center justify-center">
-                        <p className="opacity-60">Board Placeholder</p>
-                    </div>
+                    < Board />
 
                     {/* Scoreboard  */}
                     <div className="mt-8 w-full max-w-[520px]">
@@ -52,6 +50,43 @@ function ScoreCard({ label, value }: { label: string; value: number }) {
     );
 }
 
-function Board() {}
+function Board() {
+    return (
+        <div className="grid grid-cols-3 grid-rows-3 w-[480px] h-[480px] font-semibold">
+            {/* Row 1 */}
+            <div className="flex items-center justify-center border-r-[8px] border-b-[8px] border-white text-[96px] text-[#4ADE80]">
+                X
+            </div>
+            <div className="flex items-center justify-center border-r-[8px] border-b-[8px] border-white text-[96px]">
+                O
+            </div>
+            <div className="flex items-center justify-center border-b-[8px] border-white text-[96px]">
+                O
+            </div>
+
+            {/* Row 2 */}
+            <div className="flex items-center justify-center border-r-[8px] border-b-[8px] border-white text-[96px]">
+                O
+            </div>
+            <div className="flex items-center justify-center border-r-[8px] border-b-[8px] border-white text-[96px] text-[#4ADE80]">
+                X
+            </div>
+            <div className="flex items-center justify-center border-b-[8px] border-white text-[96px]">
+                O
+            </div>
+
+            {/* Row 3 */}
+            <div className="flex items-center justify-center border-r-[8px] border-white text-[96px]">
+                O
+            </div>
+            <div className="flex items-center justify-center border-r-[8px] border-white text-[96px]">
+                O
+            </div>
+            <div className="flex items-center justify-center text-[96px] text-[#4ADE80]">
+                X
+            </div>
+        </div>
+    );
+}
 
 export default App;
