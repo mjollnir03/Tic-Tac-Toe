@@ -23,6 +23,15 @@ function App() {
                     <div className="border-4 border-[#F8FAFC] w-[90vw] max-w-[480px] aspect-square flex items-center justify-center">
                         <p className="opacity-60">Board Placeholder</p>
                     </div>
+
+                    {/* Scoreboard  */}
+                    <div className="mt-8 w-full max-w-[520px]">
+                        <div className="grid grid-cols-3 gap-4">
+                            <ScoreCard label="Player (X)" value={0} />
+                            <ScoreCard label="Tie" value={0} />
+                            <ScoreCard label="AI (O)" value={0} />
+                        </div>
+                    </div>
                 </div>
             </main>
 
@@ -30,6 +39,15 @@ function App() {
             <footer className="text-center py-4 lg:text-[24px] font-semibold">
                 Ellmaer Ranjber
             </footer>
+        </div>
+    );
+}
+
+function ScoreCard({ label, value }: { label: string; value: number }) {
+    return (
+        <div className="flex flex-col items-center px-4 py-3">
+            <div className="text-sm lg:text-base font-semibold">{label}</div>
+            <div className="text-lg lg:text-xl font-semibold mt-1">{value}</div>
         </div>
     );
 }
