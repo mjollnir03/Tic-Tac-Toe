@@ -1,6 +1,42 @@
 import "./App.css";
+import React from "react";
+import { Game, type Cell } from "./game";
 
-function App() {
+export default function App() {
+    const [game, setGame] = React.useState(() => new Game());
+    const [scores, setScores] = React.useState({ X: 0, O: 0, Ties: 0 });
+
+    const winner = game.winner;
+    const over = game.isOver;
+
+    const status = winner
+        ? `Winner: ${winner}`
+        : over
+        ? "Draw"
+        : `${game.turn}'s Turn`;
+
+    function handleCellClick(i: number) {
+        setGame((prev) => {
+            const next = prev.makeMove(i);
+            // If that move finished the game, update scores now
+            if (next.isOver && next !== prev) {
+                const w = next.winner;
+                setScores((s) =>
+                    w === "X"
+                        ? { ...s, X: s.X + 1 }
+                        : w === "O"
+                        ? { ...s, O: s.O + 1 }
+                        : { ...s, Ties: s.Ties + 1 }
+                );
+            }
+            return next;
+        });
+    }
+
+    function handleReset() {
+        setGame((g) => g.reset());
+    }
+
     return (
         <div className="min-h-screen flex flex-col bg-[#171717] text-[#F8FAFC]">
             {/* Header */}
@@ -8,28 +44,46 @@ function App() {
                 <p className="text-[24px] xs:text-[28px] sm:text-[32px] md:text-[48px] lg:text-[64px] font-semibold">
                     Tic Tac Toe
                 </p>
-                <p className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline cursor-pointer">
+                <button
+                    className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline"
+                >
                     Rules
-                </p>
+                </button>
             </header>
 
             {/* Game Container */}
             <main className="flex flex-1 justify-center items-center">
                 <div className="flex flex-col items-center">
-                    {/* Current Turn */}
-                    <div className="font-semibold text-[24px] xs:text-[28px] sm:text-[32px] md:text-[36px] lg:text-[40px] mb-6">
-                        X&apos;s Turn
+                    {/* Status */}
+                    <div className="font-semibold text-[24px] xs:text-[28px] sm:text-[32px] md:text-[36px] lg:text-[40px] mb-4">
+                        {status}
                     </div>
 
                     {/* Board */}
-                    <Board />
+                    <BoardView
+                        cells={game.board.state}
+                        onCellClick={handleCellClick}
+                        disabled={over}
+                    />
+
+                    {/* Controls */}
+                    <div className="mt-6 w-full max-w-[520px]">
+                        <div className="flex justify-center">
+                            <button
+                                onClick={handleReset}
+                                className="rounded-lg font-semibold text-[12px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px]"
+                            >
+                                Reset Board
+                            </button>
+                        </div>
+                    </div>
 
                     {/* Scoreboard */}
                     <div className="mt-8 w-full max-w-[520px]">
                         <div className="grid grid-cols-3 gap-4">
-                            <ScoreCard label="Player (X)" value={0} />
-                            <ScoreCard label="Tie" value={0} />
-                            <ScoreCard label="AI (O)" value={0} />
+                            <ScoreCard label="Player (X)" value={scores.X} />
+                            <ScoreCard label="Tie" value={scores.Ties} />
+                            <ScoreCard label="AI (O)" value={scores.O} />
                         </div>
                     </div>
                 </div>
@@ -56,44 +110,39 @@ function ScoreCard({ label, value }: { label: string; value: number }) {
     );
 }
 
-function Board() {
+function BoardView({
+    cells,
+    onCellClick,
+    disabled,
+}: {
+    cells: ReadonlyArray<Cell>;
+    onCellClick: (i: number) => void;
+    disabled: boolean;
+}) {
+    const base =
+        "flex items-center justify-center select-none " +
+        "text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]";
+
+    function cellBorders(i: number): string {
+        let classes = " border-white";
+        if (i % 3 !== 2) classes += " border-r-[6px] sm:border-r-[8px]";
+        if (i < 6) classes += " border-b-[6px] sm:border-b-[8px]";
+        return classes;
+    }
+
     return (
-        // Resize grid per breakpoint
         <div className="grid grid-cols-3 grid-rows-3 w-[280px] h-[280px] xs:w-[360px] xs:h-[360px] sm:w-[420px] sm:h-[420px] md:w-[460px] md:h-[460px] lg:w-[500px] lg:h-[500px] font-semibold">
-            {/* Row 1 */}
-            <div className="flex items-center justify-center border-r-[6px] sm:border-r-[8px] border-b-[6px] sm:border-b-[8px] border-white text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px] text-[#4ADE80]">
-                X
-            </div>
-            <div className="flex items-center justify-center border-r-[6px] sm:border-r-[8px] border-b-[6px] sm:border-b-[8px] border-white text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]">
-                O
-            </div>
-            <div className="flex items-center justify-center border-b-[6px] sm:border-b-[8px] border-white text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]">
-                O
-            </div>
-
-            {/* Row 2 */}
-            <div className="flex items-center justify-center border-r-[6px] sm:border-r-[8px] border-b-[6px] sm:border-b-[8px] border-white text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]">
-                O
-            </div>
-            <div className="flex items-center justify-center border-r-[6px] sm:border-r-[8px] border-b-[6px] sm:border-b-[8px] border-white text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px] text-[#4ADE80]">
-                X
-            </div>
-            <div className="flex items-center justify-center border-b-[6px] sm:border-b-[8px] border-white text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]">
-                O
-            </div>
-
-            {/* Row 3 */}
-            <div className="flex items-center justify-center border-r-[6px] sm:border-r-[8px] border-white text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]">
-                O
-            </div>
-            <div className="flex items-center justify-center border-r-[6px] sm:border-r-[8px] border-white text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]">
-                O
-            </div>
-            <div className="flex items-center justify-center text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px] text-[#4ADE80]">
-                X
-            </div>
+            {cells.map((value, i) => (
+                <button
+                    key={i}
+                    className={`${base}${cellBorders(i)}`}
+                    onClick={() => onCellClick(i)}
+                    disabled={disabled || value !== null}
+                    aria-label={`Cell ${i + 1}`}
+                >
+                    {value}
+                </button>
+            ))}
         </div>
     );
 }
-
-export default App;

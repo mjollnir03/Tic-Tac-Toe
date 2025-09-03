@@ -1,3 +1,16 @@
 @import "tailwindcss";
 
+:root {
+    --bg-color: #171717;
+    --txt-color: #f8fafc;
+    --txt-won-color: #4ade80;
+    --txt-lost-color: #f43f5e;
+}
 
+.txt-won-color {
+    color: var(--txt-won-color);
+}
+
+.txt-lost-color {
+    color: var(--txt-lost-color);
+}
