@@ -24,7 +24,6 @@ export class Board {
         }
     }
 
-    
     getBoard(): ReadonlyArray<Cell> {
         return this.cells;
     }
@@ -33,8 +32,12 @@ export class Board {
         return this.cells[i];
     }
 
-    isEmpty(i: number): boolean {
+    isCellEmpty(i: number): boolean {
         return this.cells[i] === null;
+    }
+
+    isBoardEmpty(): boolean {
+        return this.cells.every((c) => c === null);
     }
 
     isFull(): boolean {
@@ -42,27 +45,35 @@ export class Board {
     }
 
     winner(): Cell {
-        for (const [a, b, c] of WIN_LINES) {
-            const v = this.cells[a];
-            if (v && v === this.cells[b] && v === this.cells[c]) return v;
+        // Check each of the 8 possible winning lines
+        for (const line of WIN_LINES) {
+            const [first, second, third] = line;
+
+            // Get the value of the first cell in the line ('X', 'O', or null)
+            const firstCell = this.cells[first];
+
+            // A line can only be a winner if the first cell is not empty
+            // and all three cells in the line are the same.
+            if (
+                firstCell &&
+                firstCell === this.cells[second] &&
+                firstCell === this.cells[third]
+            ) {
+                // We have a winner, so we return the player ('X' or 'O')
+                return firstCell;
+            }
         }
+
+        // If the loop finishes without finding a winning line, return null
         return null;
     }
 
     /** Immutable: returns a NEW board with the move applied (if legal), else same board */
     placeMark(i: number, player: Player): Board {
-        if (!this.isEmpty(i)) return this;
+        if (!this.isCellEmpty(i)) return this;
         const next = [...this.cells];
         next[i] = player;
         return new Board(next);
-    }
-
-    /** Handy for AI later */
-    emptyIndices(): number[] {
-        const out: number[] = [];
-        for (let i = 0; i < this.cells.length; i++)
-            if (this.cells[i] === null) out.push(i);
-        return out;
     }
 }
 
@@ -85,7 +96,7 @@ export class Game {
 
     /** Immutable: returns a NEW Game after attempting a move */
     makeMove(i: number): Game {
-        if (this.isOver || !this.board.isEmpty(i)) return this;
+        if (this.isOver || !this.board.isCellEmpty(i)) return this;
         const nextBoard = this.board.placeMark(i, this.turn);
         const nextTurn: Player = this.turn === "X" ? "O" : "X";
         return new Game(nextBoard, nextTurn);

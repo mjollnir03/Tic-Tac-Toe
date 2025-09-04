@@ -1,16 +1,17 @@
 import "./App.css";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Game, type Cell } from "./game";
 
 export default function App() {
     const [game, setGame] = React.useState(() => new Game());
     const [scores, setScores] = React.useState({ X: 0, O: 0, Ties: 0 });
+    const prevGameRef = useRef(game);
 
     const winner = game.winner;
     const over = game.isOver;
 
     let status;
-    
+
     if (winner) {
         status = `Winner: ${winner}`;
     } else if (over) {
@@ -20,22 +21,27 @@ export default function App() {
     }
 
     function handleCellClick(i: number) {
-        setGame((prev) => {
-            const next = prev.makeMove(i);
-            // If that move finished the game, update scores now
-            if (next.isOver && next !== prev) {
-                const w = next.winner;
-                setScores((s) =>
-                    w === "X"
-                        ? { ...s, X: s.X + 1 }
-                        : w === "O"
-                        ? { ...s, O: s.O + 1 }
-                        : { ...s, Ties: s.Ties + 1 }
-                );
-            }
-            return next;
-        });
+        setGame((prev) => prev.makeMove(i));
     }
+
+    useEffect(() => {
+        // Check if the game wasn't over before, but IS over now
+        if (!prevGameRef.current.isOver && game.isOver) {
+            const w = game.winner;
+            setScores((prevScores) => {
+                if (w === "X") {
+                    return { ...prevScores, X: prevScores.X + 1 };
+                } else if (w === "O") {
+                    return { ...prevScores, O: prevScores.O + 1 };
+                } else {
+                    // This handles a tie, where 'w' is null
+                    return { ...prevScores, Ties: prevScores.Ties + 1 };
+                }
+            });
+        }
+        // Update the ref to the current game state for the next render
+        prevGameRef.current = game;
+    }, [game]);
 
     function handleReset() {
         setGame((g) => g.reset());
@@ -112,15 +118,13 @@ function ScoreCard({ label, value }: { label: string; value: number }) {
     );
 }
 
-function BoardView({
-    cells,
-    onCellClick,
-    disabled,
-}: {
+type BoardViewProps = {
     cells: ReadonlyArray<Cell>;
     onCellClick: (i: number) => void;
     disabled: boolean;
-}) {
+};
+
+function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
     const base =
         "flex items-center justify-center select-none " +
         "text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]";
