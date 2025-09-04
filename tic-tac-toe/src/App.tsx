@@ -9,11 +9,15 @@ export default function App() {
     const winner = game.winner;
     const over = game.isOver;
 
-    const status = winner
-        ? `Winner: ${winner}`
-        : over
-        ? "Draw"
-        : `${game.turn}'s Turn`;
+    let status;
+    
+    if (winner) {
+        status = `Winner: ${winner}`;
+    } else if (over) {
+        status = "Draw";
+    } else {
+        status = `${game.turn}'s Turn`;
+    }
 
     function handleCellClick(i: number) {
         setGame((prev) => {
@@ -44,9 +48,7 @@ export default function App() {
                 <p className="text-[24px] xs:text-[28px] sm:text-[32px] md:text-[48px] lg:text-[64px] font-semibold">
                     Tic Tac Toe
                 </p>
-                <button
-                    className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline"
-                >
+                <button className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline">
                     Rules
                 </button>
             </header>
@@ -61,7 +63,7 @@ export default function App() {
 
                     {/* Board */}
                     <BoardView
-                        cells={game.board.state}
+                        cells={game.board.getBoard()}
                         onCellClick={handleCellClick}
                         disabled={over}
                     />

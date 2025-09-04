@@ -17,15 +17,19 @@ export class Board {
     private readonly cells: ReadonlyArray<Cell>;
 
     constructor(cells?: ReadonlyArray<Cell>) {
-        this.cells = cells ? [...cells] : Array<Cell>(9).fill(null);
+        if (cells) {
+            this.cells = [...cells];
+        } else {
+            this.cells = Array<Cell>(9).fill(null);
+        }
     }
 
-    /** Read-only accessor for UI */
-    get state(): ReadonlyArray<Cell> {
+    
+    getBoard(): ReadonlyArray<Cell> {
         return this.cells;
     }
 
-    get(i: number): Cell {
+    getCell(i: number): Cell {
         return this.cells[i];
     }
 
@@ -46,7 +50,7 @@ export class Board {
     }
 
     /** Immutable: returns a NEW board with the move applied (if legal), else same board */
-    place(i: number, player: Player): Board {
+    placeMark(i: number, player: Player): Board {
         if (!this.isEmpty(i)) return this;
         const next = [...this.cells];
         next[i] = player;
@@ -82,7 +86,7 @@ export class Game {
     /** Immutable: returns a NEW Game after attempting a move */
     makeMove(i: number): Game {
         if (this.isOver || !this.board.isEmpty(i)) return this;
-        const nextBoard = this.board.place(i, this.turn);
+        const nextBoard = this.board.placeMark(i, this.turn);
         const nextTurn: Player = this.turn === "X" ? "O" : "X";
         return new Game(nextBoard, nextTurn);
     }
