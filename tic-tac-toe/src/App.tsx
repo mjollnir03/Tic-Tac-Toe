@@ -20,11 +20,11 @@ export default function App() {
     // === DERIVED STATE ===
     // These are values calculated from our main 'game' state on every render.
     // We don't need to store them in useState because they depend directly on 'game'.
-    const winner = game.winner;
-    const over = game.isOver;
+    const winner: Cell = game.winner;
+    const over: boolean = game.isOver;
 
     // The status message to be displayed (e.g., "X's Turn", "Winner: O").
-    let status;
+    let status: string;
     if (winner) {
         status = `Winner: ${winner}`;
     } else if (over) {
@@ -39,7 +39,7 @@ export default function App() {
     useEffect(() => {
         // This condition checks if the game just finished on this render.
         if (!prevGameRef.current.isOver && game.isOver) {
-            const w = game.winner;
+            const w: Cell = game.winner;
             // We use the function form of setScores to ensure we have the latest scores.
             setScores((prevScores) => {
                 if (w === "X") {
@@ -57,14 +57,19 @@ export default function App() {
 
     // === EVENT HANDLERS ===
     // This function is called when a cell button is clicked.
-    function handleCellClick(i: number) {
+    function handleCellClick(i: number): void {
         // We update the game state by calling the immutable 'makeMove' method.
-        setGame((prev) => prev.makeMove(i));
+        setGame((prev: Game) => prev.makeMove(i));
     }
 
     // This function resets the game to its initial state.
-    function handleReset() {
-        setGame((g) => g.reset());
+    function handleReset(): void {
+        setGame((g: Game) => g.reset());
+    }
+
+    function displayRuleAlert(): void {
+        alert("hello world")
+
     }
 
     // === JSX (RENDERING) ===
@@ -76,9 +81,9 @@ export default function App() {
                 <p className="text-[24px] xs:text-[28px] sm:text-[32px] md:text-[48px] lg:text-[64px] font-semibold">
                     Tic Tac Toe
                 </p>
-                <button className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline">
-                    Rules
-                </button>
+
+                {/* RulesView component rendered here */}
+                <RulesView rules={displayRuleAlert} />
             </header>
 
             {/* Main Game Area */}
@@ -180,5 +185,17 @@ function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
                 </button>
             ))}
         </div>
+    );
+}
+
+
+function RulesView({rules} : {rules: () => void}) {
+    return (
+        <button
+            className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline"
+            onClick={rules}
+        >
+            Rules
+        </button>
     );
 }

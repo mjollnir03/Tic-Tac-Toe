@@ -68,7 +68,7 @@ export class Board {
         // Loop through each of the 8 possible winning lines.
         for (const line of WIN_LINES) {
             const [first, second, third] = line;
-            const firstCell = this.cells[first];
+            const firstCell: Cell = this.cells[first];
 
             // If the first cell isn't empty and all three cells in the line match...
             if (
