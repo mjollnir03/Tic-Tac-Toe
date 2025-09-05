@@ -12,6 +12,8 @@ export default function App() {
     const [game, setGame] = React.useState(() => new Game());
     // 'scores' holds the scoreboard state.
     const [scores, setScores] = React.useState({ X: 0, O: 0, Ties: 0 });
+    // Panel open state for the Rules sheet
+    const [rulesOpen, setRulesOpen] = React.useState(false);
 
     // 'useRef' is used to store a value that persists across renders without causing a re-render.
     // We use it to keep track of the previous game state to compare inside useEffect.
@@ -68,14 +70,27 @@ export default function App() {
     }
 
     function displayRuleAlert(): void {
-        alert("hello world")
-
+        setRulesOpen(true);
     }
 
     // === JSX (RENDERING) ===
     // This describes the HTML structure of our application.
     return (
         <div className="min-h-screen flex flex-col bg-[#171717] text-[#F8FAFC]">
+            
+            {/* Rules panel (shown when rulesOpen == true) */}
+            <RulesPanel open={rulesOpen} onClose={() => setRulesOpen(false)}>
+                {/* example content */}
+                <h2 id="rules-title" className="text-xl font-semibold mb-3">
+                    Game Rules
+                </h2>
+                <ul className="list-disc pl-5 space-y-1 text-sm leading-6">
+                    <li>Players take turns placing X and O.</li>
+                    <li>3 in a row (row/column/diagonal) wins.</li>
+                    <li>Full board with no winner -- draw.</li>
+                </ul>
+            </RulesPanel>
+
             {/* Header Section */}
             <header className="flex justify-between items-center px-4 sm:px-8 mt-4">
                 <p className="text-[24px] xs:text-[28px] sm:text-[32px] md:text-[48px] lg:text-[64px] font-semibold">
@@ -188,8 +203,7 @@ function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
     );
 }
 
-
-function RulesView({rules} : {rules: () => void}) {
+function RulesView({ rules }: { rules: () => void }) {
     return (
         <button
             className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline"
@@ -197,5 +211,76 @@ function RulesView({rules} : {rules: () => void}) {
         >
             Rules
         </button>
+    );
+}
+
+type RulesPanelProps = {
+    open: boolean;
+    onClose: () => void;
+    children: React.ReactNode;
+};
+
+function RulesPanel({ open, onClose, children }: RulesPanelProps) {
+    // Close on Escape
+    React.useEffect(() => {
+        if (!open) return;
+        function onKeyDown(e: KeyboardEvent) {
+            if (e.key === "Escape") onClose();
+        }
+        window.addEventListener("keydown", onKeyDown);
+        return () => window.removeEventListener("keydown", onKeyDown);
+    }, [open, onClose]);
+
+    // Prevent scroll bleed on body when open
+    React.useEffect(() => {
+        if (!open) return;
+        const { overflow } = document.body.style;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = overflow;
+        };
+    }, [open]);
+
+    // Main container for the modal and backdrop
+    return (
+        <div
+            className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300
+                        ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        >
+            {/* Backdrop */}
+            <div
+                className="absolute inset-0 bg-black/50"
+                onClick={onClose}
+                aria-hidden="true"
+            />
+
+            {/* Modal Dialog */}
+            <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="rules-title"
+                className={`relative w-full max-w-sm transform rounded-lg bg-white text-gray-900 shadow-xl transition-all duration-300
+                            ${open ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
+            >
+                <header className="flex items-center justify-between p-4 border-b">
+                    <h2
+                        id="rules-title"
+                        className="text-lg sm:text-xl font-semibold"
+                    >
+                        Rules
+                    </h2>
+                    <button
+                        className="text-gray-500 hover:text-gray-800"
+                        onClick={onClose}
+                        aria-label="Close rules panel"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </header>
+                <div className="p-4 space-y-3">
+                    {children}
+                </div>
+            </div>
+        </div>
     );
 }
