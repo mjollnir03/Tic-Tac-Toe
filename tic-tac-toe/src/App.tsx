@@ -69,6 +69,7 @@ export default function App() {
         setGame((g: Game) => g.reset());
     }
 
+    // This function will call to display Rules Panel
     function displayRuleAlert(): void {
         setRulesOpen(true);
     }
@@ -202,6 +203,7 @@ function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
     );
 }
 
+/* A simple presentational component for the "Rules" button. */
 function RulesView({ rules }: { rules: () => void }) {
     return (
         <button
@@ -213,47 +215,59 @@ function RulesView({ rules }: { rules: () => void }) {
     );
 }
 
+// Defines the props for the RulesPanel component.
 type RulesPanelProps = {
-    open: boolean;
-    onClose: () => void;
-    children: React.ReactNode;
+    open: boolean; // Controls whether the panel is visible.
+    onClose: () => void; // Function to call when the panel should be closed.
+    children: React.ReactNode; // The content to display inside the panel.
 };
 
+/*
+ * A modal dialog component for displaying the rules.
+ * It includes a backdrop and can be closed by clicking the backdrop,
+ * the close button, or pressing the Escape key.
+ */
 function RulesPanel({ open, onClose, children }: RulesPanelProps) {
-    // Close on Escape
+    // This effect adds a keydown event listener to the window.
+    // When the "Escape" key is pressed, it calls the onClose function.
     React.useEffect(() => {
         if (!open) return;
         function onKeyDown(e: KeyboardEvent) {
             if (e.key === "Escape") onClose();
         }
         window.addEventListener("keydown", onKeyDown);
+        // The "cleanup" function removes the event listener when the component unmounts
+        // or when the 'open' or 'onClose' dependencies change.
         return () => window.removeEventListener("keydown", onKeyDown);
     }, [open, onClose]);
 
-    // Prevent scroll bleed on body when open
+    // This effect prevents the body from scrolling when the modal is open.
     React.useEffect(() => {
         if (!open) return;
         const { overflow } = document.body.style;
         document.body.style.overflow = "hidden";
+        // The "cleanup" function restores the original overflow style.
         return () => {
             document.body.style.overflow = overflow;
         };
     }, [open]);
 
-    // Main container for the modal and backdrop
+    // Main container for the modal and backdrop.
+    // The visibility and animations are controlled by the 'open' state.
     return (
         <div
             className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300
                         ${open ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
-            {/* Backdrop */}
+            {/* Backdrop: A semi-transparent layer that covers the page.
+                Clicking it will trigger the onClose function. */}
             <div
                 className="absolute inset-0 bg-black/50"
                 onClick={onClose}
                 aria-hidden="true"
             />
 
-            {/* Modal Dialog */}
+            {/* Modal Dialog: The main content of the panel. */}
             <div
                 role="dialog"
                 aria-modal="true"
