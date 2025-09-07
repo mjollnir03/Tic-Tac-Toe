@@ -77,17 +77,16 @@ export default function App() {
     // This describes the HTML structure of our application.
     return (
         <div className="min-h-screen flex flex-col bg-[#171717] text-[#F8FAFC]">
-            
             {/* Rules panel (shown when rulesOpen == true) */}
             <RulesPanel open={rulesOpen} onClose={() => setRulesOpen(false)}>
-                {/* example content */}
-                <h2 id="rules-title" className="text-xl font-semibold mb-3">
-                    Game Rules
-                </h2>
-                <ul className="list-disc pl-5 space-y-1 text-sm leading-6">
-                    <li>Players take turns placing X and O.</li>
-                    <li>3 in a row (row/column/diagonal) wins.</li>
-                    <li>Full board with no winner -- draw.</li>
+                {/* Rules */}
+                <ul className="list-disc pl-5 space-y-1 text-[14px] md:text-[16px] lg:text-[20px] leading-6">
+                    <li><strong>X</strong> always goes first.</li>
+                    <li>Players take turns placing <strong>X</strong> and <strong>O</strong> in empty cells.</li>
+                    <li><strong>O</strong> is controlled by an AI using the <strong>Minimax algorithm</strong> and cannot be beaten.</li>
+                    <li>A player wins by getting <strong>3 in a row</strong> (horizontally, vertically, or diagonally).</li>
+                    <li>If all 9 cells are filled with no winner, the game ends in a <strong>draw</strong>.</li>
+                    <li>Use the <strong>Reset Board</strong> button to start a new round.</li>
                 </ul>
             </RulesPanel>
 
@@ -206,7 +205,7 @@ function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
 function RulesView({ rules }: { rules: () => void }) {
     return (
         <button
-            className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline"
+            className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline hover:opacity-75 transform duration-300"
             onClick={rules}
         >
             Rules
@@ -259,27 +258,40 @@ function RulesPanel({ open, onClose, children }: RulesPanelProps) {
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="rules-title"
-                className={`relative w-full max-w-sm transform rounded-lg bg-white text-gray-900 shadow-xl transition-all duration-300
+                className={`relative w-full max-w-md transform rounded-lg bg-white text-gray-900 shadow-xl transition-all duration-300
                             ${open ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
             >
                 <header className="flex items-center justify-between p-4 border-b">
                     <h2
                         id="rules-title"
-                        className="text-lg sm:text-xl font-semibold"
+                        className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold"
                     >
                         Rules
                     </h2>
-                    <button
-                        className="text-gray-500 hover:text-gray-800"
-                        onClick={onClose}
-                        aria-label="Close rules panel"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <button onClick={onClose} aria-label="Close rules panel">
+                        <svg
+                            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+                            version="1.1"
+                            id="Capa_1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 460.77 460.77"
+                            xmlSpace="preserve"
+                        >
+                            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                            <g
+                                id="SVGRepo_tracerCarrier"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            ></g>
+                            <g id="SVGRepo_iconCarrier">
+                                {" "}
+                                <path d="M285.08,230.397L456.218,59.27c6.076-6.077,6.076-15.911,0-21.986L423.511,4.565c-2.913-2.911-6.866-4.55-10.992-4.55 c-4.127,0-8.08,1.639-10.993,4.55l-171.138,171.14L59.25,4.565c-2.913-2.911-6.866-4.55-10.993-4.55 c-4.126,0-8.08,1.639-10.992,4.55L4.558,37.284c-6.077,6.075-6.077,15.909,0,21.986l171.138,171.128L4.575,401.505 c-6.074,6.077-6.074,15.911,0,21.986l32.709,32.719c2.911,2.911,6.865,4.55,10.992,4.55c4.127,0,8.08-1.639,10.994-4.55 l171.117-171.12l171.118,171.12c2.913,2.911,6.866,4.55,10.993,4.55c4.128,0,8.081-1.639,10.992-4.55l32.709-32.719 c6.074-6.075,6.074-15.909,0-21.986L285.08,230.397z"></path>{" "}
+                            </g>
+                        </svg>
                     </button>
                 </header>
-                <div className="p-4 space-y-3">
-                    {children}
-                </div>
+                <div className="p-4 space-y-3">{children}</div>
             </div>
         </div>
     );
