@@ -92,7 +92,7 @@ export default function App() {
             <RulesPanel open={rulesOpen} onClose={() => setRulesOpen(false)}>
                 {/* Rules */}
                 <ul className="list-disc pl-5 space-y-1 text-[14px] md:text-[16px] lg:text-[20px] leading-6">
-                    <li><strong>X</strong> always goes first.</li>
+                    <li>You play as <strong>X</strong> and always goes first.</li>
                     <li>Players take turns placing <strong>X</strong> and <strong>O</strong> in empty cells.</li>
                     <li><strong>O</strong> is controlled by an AI using the <strong>Minimax algorithm</strong> and cannot be beaten.</li>
                     <li>A player wins by getting <strong>3 in a row</strong> (horizontally, vertically, or diagonally).</li>
@@ -131,7 +131,7 @@ export default function App() {
                         <div className="flex justify-center">
                             <button
                                 onClick={handleReset}
-                                className="rounded p-1 font-semibold text-[12px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] text-[#171717] bg-[#F8FAFC] transform hover:opacity-65 duration-300"
+                                className="rounded p-1 font-semibold text-[12px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] text-[#171717] bg-[#F8FAFC] transform hover:opacity-65 duration-300 cursor-pointer" 
                             >
                                 Reset Board
                             </button>
@@ -185,7 +185,7 @@ type BoardViewProps = {
 function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
     // Base CSS classes for all cells.
     const base =
-        "flex items-center justify-center select-none " +
+        "flex items-center justify-center select-none cursor-pointer " +
         "text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]";
 
     // A helper function to dynamically add border classes to each cell.
@@ -217,7 +217,7 @@ function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
 function RulesView({ rules }: { rules: () => void }) {
     return (
         <button
-            className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline hover:opacity-75 transform duration-300"
+            className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline hover:opacity-75 transform duration-300 cursor-pointer"
             onClick={rules}
         >
             Rules
@@ -294,7 +294,7 @@ function RulesPanel({ open, onClose, children }: RulesPanelProps) {
                     </h2>
                     <button onClick={onClose} aria-label="Close rules panel">
                         <svg
-                            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+                            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 hover:opacity-50 transform duration-300 cursor-pointer"
                             version="1.1"
                             id="Capa_1"
                             xmlns="http://www.w3.org/2000/svg"
