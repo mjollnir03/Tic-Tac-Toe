@@ -151,4 +151,39 @@ export class Game {
     reset(): Game {
         return new Game(new Board(), "X");
     }
+    // Minimax Function (Sebastion Lague's Implementation)
+    private minimax(
+        currentBoard: Board,
+        depth: number,
+        maximizingPlayer: boolean
+    ): number {
+        const w = currentBoard.winner();
+
+        // Base Case
+        if (w === "O") return 10 + depth;
+        if (w === "X") return -10 - depth;
+        if (depth === 0 || currentBoard.isFull()) return 0;
+
+        const positions = currentBoard.getEmptyIndices();
+
+        if (maximizingPlayer) {
+            let maxVal = -Infinity;
+            // for each possible position in currentBoard
+            for (const idx of positions) {
+                const child = currentBoard.placeMark(idx, "O");
+                const val = this.minimax(child, depth - 1, false);
+                maxVal = Math.max(maxVal, val);
+            }
+            return maxVal;
+        } else {
+            let minVal = +Infinity;
+            // for each possible position in currentBoard
+            for (const idx of positions) {
+                const child = currentBoard.placeMark(idx, "X");
+                const val = this.minimax(child, depth - 1, true);
+                minVal = Math.min(minVal, val);
+            }
+            return minVal;
+        }
+    }
 }
