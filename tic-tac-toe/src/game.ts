@@ -95,6 +95,16 @@ export class Board {
         nextCells[i] = player; // Place the mark in the copy.
         return new Board(nextCells); // Return a new Board instance with the copied array.
     }
+
+    getEmptyIndices(): number[] {
+        const result: number[] = [];
+        for (let i = 0; i < 9; i++) {
+            if (this.cells[i] === null) {
+                result.push(i);
+            }
+        }
+        return result;
+    }
 }
 
 /*
