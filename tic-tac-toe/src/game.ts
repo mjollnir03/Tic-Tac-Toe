@@ -151,6 +151,13 @@ export class Game {
     reset(): Game {
         return new Game(new Board(), "X");
     }
+    makeAIMove(): Game {
+        return this.makeMove(this.getBestMove()); // Temporarily to make it work
+
+        // From getBestMove() we take the idx in which will be the best place to place "O"
+        // Then place "O" with return this.makeMove(idx)
+    }
+
     // Minimax Function (Sebastion Lague's Implementation)
     private minimax(
         currentBoard: Board,
