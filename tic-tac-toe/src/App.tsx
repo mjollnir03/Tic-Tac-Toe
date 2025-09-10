@@ -57,11 +57,15 @@ export default function App() {
         prevGameRef.current = game;
     }, [game]); // The dependency array: this effect runs ONLY when the 'game' object changes.
 
+    // This effect handles the AI's turn.
     useEffect(() => {
-        if (!game.isOver && game.turn === 'O') {
+        // If it's O's turn and the game isn't over...
+        if (!game.isOver && game.turn === "O") {
+            // ...tell the AI to make its move.
             setGame((prev: Game) => prev.makeAIMove());
         }
-    }, [game])
+        // This runs every time the game state changes.
+    }, [game]);
 
     // === EVENT HANDLERS ===
     // This function is called when a cell button is clicked.
