@@ -121,7 +121,7 @@ export default function App() {
                         <div className="flex justify-center">
                             <button
                                 onClick={handleReset}
-                                className="rounded-lg font-semibold text-[12px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px]"
+                                className="rounded p-1 font-semibold text-[12px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] text-[#171717] bg-[#F8FAFC] transform hover:opacity-65 duration-300"
                             >
                                 Reset Board
                             </button>
