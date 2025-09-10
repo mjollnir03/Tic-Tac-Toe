@@ -151,6 +151,49 @@ export class Game {
     reset(): Game {
         return new Game(new Board(), "X");
     }
+
+    // Function to return the index of best possible choice
+    private getBestMove(): number {
+        type generated_Game_States = {
+            indexPlaced: number;
+            newGameBoard: Board;
+        };
+
+        const emptyCellIndexes = this.board.getEmptyIndices();
+        let states: generated_Game_States[] = [];
+
+        for (const idx of emptyCellIndexes) {
+            let temp: generated_Game_States = {
+                indexPlaced: idx,
+                newGameBoard: this.board.placeMark(idx, "O"),
+            };
+            states.push(temp);
+        }
+
+        let maxVal = -Infinity;
+        let optimalIdx = states[0].indexPlaced;
+
+        // Iterate through all possible states, call minimax algorithm
+        // From minimax algorithm extract the "score"
+        // Compare score to val, if greater, update val and store the idx of this state with a higher val than maxVal
+
+        for (const state of states) {
+            const val = this.minimax(
+                state.newGameBoard,
+                state.newGameBoard.getEmptyIndices().length,
+                false
+            );
+
+            // check if
+            if (val > maxVal) {
+                maxVal = val;
+                optimalIdx = state.indexPlaced;
+            }
+        }
+
+        return optimalIdx;
+    }
+
     makeAIMove(): Game {
         return this.makeMove(this.getBestMove()); // Temporarily to make it work
 
