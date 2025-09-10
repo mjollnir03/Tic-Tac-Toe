@@ -1,19 +1,19 @@
 import "./App.css";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 // Import the Game class and Cell type from our logic file.
 import { Game, type Cell } from "./game";
 
 // This is the main component for the entire application.
 export default function App() {
     // === STATE MANAGEMENT ===
-    // 'useState' holds the state of our component.
     // 'game' holds the current instance of our Game class.
-    // We pass a function () => new Game() so the object is created only once on initial render.
-    const [game, setGame] = React.useState(() => new Game());
+    const [game, setGame] = useState(() => new Game());
     // 'scores' holds the scoreboard state.
-    const [scores, setScores] = React.useState({ X: 0, O: 0, Ties: 0 });
+    const [scores, setScores] = useState({ X: 0, O: 0, Ties: 0 });
+    // New state to track when the AI is "thinking".
+    const [isThinking, setIsThinking] = useState(false);
     // Panel open state for the Rules sheet
-    const [rulesOpen, setRulesOpen] = React.useState(false);
+    const [rulesOpen, setRulesOpen] = useState(false);
 
     // 'useRef' is used to store a value that persists across renders without causing a re-render.
     // We use it to keep track of the previous game state to compare inside useEffect.
@@ -21,13 +21,15 @@ export default function App() {
 
     // === DERIVED STATE ===
     // These are values calculated from our main 'game' state on every render.
-    // We don't need to store them in useState because they depend directly on 'game'.
     const winner: Cell = game.winner;
     const over: boolean = game.isOver;
 
-    // The status message to be displayed (e.g., "X's Turn", "Winner: O").
+    // The status message to be displayed.
     let status: string;
-    if (winner) {
+    if (isThinking) {
+        // If the AI is thinking, display this message first.
+        status = "AI Thinking...";
+    } else if (winner) {
         status = `Winner: ${winner}`;
     } else if (over) {
         status = "Draw";
@@ -36,13 +38,10 @@ export default function App() {
     }
 
     // === SIDE EFFECTS ===
-    // 'useEffect' runs code in response to changes. This is for "side effects".
-    // Here, we use it to update the score after the game state has changed.
+    // This useEffect updates the score after the game state has changed.
     useEffect(() => {
-        // This condition checks if the game just finished on this render.
         if (!prevGameRef.current.isOver && game.isOver) {
             const w: Cell = game.winner;
-            // We use the function form of setScores to ensure we have the latest scores.
             setScores((prevScores) => {
                 if (w === "X") {
                     return { ...prevScores, X: prevScores.X + 1 };
@@ -53,18 +52,26 @@ export default function App() {
                 }
             });
         }
-        // After the effect runs, we update the ref to the current game state.
         prevGameRef.current = game;
-    }, [game]); // The dependency array: this effect runs ONLY when the 'game' object changes.
+    }, [game]);
 
-    // This effect handles the AI's turn.
+    // This effect handles the AI's turn with a delay.
     useEffect(() => {
         // If it's O's turn and the game isn't over...
         if (!game.isOver && game.turn === "O") {
-            // ...tell the AI to make its move.
-            setGame((prev: Game) => prev.makeAIMove());
+            // Set the thinking status to true to update the UI.
+            setIsThinking(true);
+            // Set a timer to simulate the AI thinking.
+            const timer = setTimeout(() => {
+                setGame((prev: Game) => prev.makeAIMove());
+                // After the move is made, set thinking status back to false.
+                setIsThinking(false);
+            }, 500); // 500ms = .5 second delay
+
+            // Cleanup function: If the game state changes before the timer finishes
+            // (e.g., user resets the board), clear the timer to prevent bugs.
+            return () => clearTimeout(timer);
         }
-        // This runs every time the game state changes.
     }, [game]);
 
     // === EVENT HANDLERS ===
@@ -123,7 +130,7 @@ export default function App() {
                     <BoardView
                         cells={game.board.getBoard()}
                         onCellClick={handleCellClick}
-                        disabled={over}
+                        disabled={over || isThinking} // Disable the board while AI is thinking
                     />
 
                     {/* Game Controls (Reset Button) */}
@@ -131,7 +138,7 @@ export default function App() {
                         <div className="flex justify-center">
                             <button
                                 onClick={handleReset}
-                                className="rounded p-1 font-semibold text-[12px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] text-[#171717] bg-[#F8FAFC] transform hover:opacity-65 duration-300 cursor-pointer" 
+                                className="rounded p-1 px-2 font-semibold text-[12px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] text-[#171717] bg-[#F8FAFC]  hover:opacity-65 duration-300 cursor-pointer"
                             >
                                 Reset Board
                             </button>
@@ -217,7 +224,7 @@ function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
 function RulesView({ rules }: { rules: () => void }) {
     return (
         <button
-            className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline hover:opacity-75 transform duration-300 cursor-pointer"
+            className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline hover:opacity-65  duration-300 cursor-pointer"
             onClick={rules}
         >
             Rules
