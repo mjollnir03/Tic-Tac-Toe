@@ -138,7 +138,8 @@ export default function App() {
                         <div className="flex justify-center">
                             <button
                                 onClick={handleReset}
-                                className="rounded p-1 px-2 font-semibold text-xs xs:text-base sm:text-lg md:text-xl text-[#171717] bg-[#F8FAFC]  hover:opacity-65 duration-300 cursor-pointer"
+                                className="select-none rounded p-1 px-2 font-semibold text-xs xs:text-base sm:text-lg md:text-xl text-[#171717] bg-[#F8FAFC]  hover:opacity-65 duration-300 cursor-pointer"
+                                disabled={isThinking}
                             >
                                 Reset Board
                             </button>
@@ -191,15 +192,55 @@ type BoardViewProps = {
  */
 function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
     const base =
-        "flex items-center justify-center select-none cursor-pointer " +
-        "text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl ";
+        "flex items-center justify-center select-none cursor-pointer text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl select-none ";
 
-    // A helper function to dynamically add border classes to each cell.
+    // A helper function to add border classes to each cell.
     function cellBorders(i: number): string {
-        let classes = "border-white";
-        if (i % 3 !== 2) classes += " border-r-[6px] sm:border-r-[8px]"; // Add right border unless it's the last column.
-        if (i < 6) classes += " border-b-[6px] sm:border-b-[8px]"; // Add bottom border unless it's the last row.
-        return classes;
+        const borderRight = " border-r-[3px] sm:border-r-[4px]";
+        const borderBottom = " border-b-[3px] sm:border-b-[4px]";
+        const borderLeft = " border-l-[3px] sm:border-l-[4px]";
+        const borderTop = " border-t-[3px] sm:border-t-[4px]";
+        let baseClasses = "border-[#F8FAFC]";
+
+        switch (i) {
+            // Top Row
+            case 0:
+                baseClasses += borderRight + borderBottom;
+                break;
+            case 1:
+                baseClasses += borderRight + borderBottom + borderLeft;
+                break;
+            case 2:
+                baseClasses += borderBottom + borderLeft;
+                break;
+            
+            // Middle Row
+            case 3:
+                baseClasses += borderTop + borderRight + borderBottom;
+                break;
+            case 4:
+                baseClasses += borderTop + borderRight + borderBottom + borderLeft;
+                break;
+            case 5:
+                baseClasses += borderTop + borderBottom + borderLeft;
+                break;
+
+            // Bottom Row
+            case 6:
+                baseClasses += borderTop + borderRight;
+                break;
+            case 7:
+                baseClasses += borderTop + borderRight + borderLeft;
+                break;
+            case 8:
+                baseClasses += borderTop + borderLeft;
+                break;
+
+            default:
+                break;
+        }
+        
+        return baseClasses;
     }
 
     return (
@@ -223,7 +264,7 @@ function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
 function RulesView({ rules }: { rules: () => void }) {
     return (
         <button
-            className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-semibold underline hover:opacity-65  duration-300 cursor-pointer"
+            className="select-none text-lg xs:text-xl sm:text-2xl md:text-3xl font-semibold underline hover:opacity-65  duration-300 cursor-pointer"
             onClick={rules}
         >
             Rules
@@ -278,7 +319,7 @@ function RulesPanel({ open, onClose, children }: RulesPanelProps) {
             {/* Backdrop: A semi-transparent layer that covers the page.
                 Clicking it will trigger the onClose function. */}
             <div
-                className="absolute inset-0 bg-black/50"
+                className="absolute inset-0 bg-[#171717]/50"
                 onClick={onClose}
                 aria-hidden="true"
             />
@@ -288,7 +329,7 @@ function RulesPanel({ open, onClose, children }: RulesPanelProps) {
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="rules-title"
-                className={`relative w-full max-w-md transform rounded-lg bg-white text-gray-900 shadow-xl transition-all duration-300
+                className={`relative w-full max-w-md transform rounded-lg bg-[#F8FAFC] text-[#171717] shadow-xl transition-all duration-300
                             ${open ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
             >
                 <header className="flex items-center justify-between p-4 border-b">
@@ -300,7 +341,7 @@ function RulesPanel({ open, onClose, children }: RulesPanelProps) {
                     </h2>
                     <button onClick={onClose} aria-label="Close rules panel">
                         <svg
-                            className="w-5 h-5 md:w-6 md:h-6 hover:opacity-50 transform duration-300 cursor-pointer"
+                            className="select-none w-5 h-5 md:w-6 md:h-6 hover:opacity-50 transform duration-300 cursor-pointer"
                             version="1.1"
                             id="Capa_1"
                             xmlns="http://www.w3.org/2000/svg"
