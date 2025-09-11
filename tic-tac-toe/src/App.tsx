@@ -5,7 +5,7 @@ import { Game, type Cell } from "./game";
 
 // This is the main component for the entire application.
 export default function App() {
-    // === STATE MANAGEMENT ===
+    // STATE MANAGEMENT
     // 'game' holds the current instance of our Game class.
     const [game, setGame] = useState(() => new Game());
     // 'scores' holds the scoreboard state.
@@ -19,7 +19,7 @@ export default function App() {
     // We use it to keep track of the previous game state to compare inside useEffect.
     const prevGameRef = useRef(game);
 
-    // === DERIVED STATE ===
+    // DERIVED STATE
     // These are values calculated from our main 'game' state on every render.
     const winner: Cell = game.winner;
     const over: boolean = game.isOver;
@@ -37,7 +37,7 @@ export default function App() {
         status = `${game.turn}'s Turn`;
     }
 
-    // === SIDE EFFECTS ===
+    // SIDE EFFECTS 
     // This useEffect updates the score after the game state has changed.
     useEffect(() => {
         if (!prevGameRef.current.isOver && game.isOver) {
@@ -74,7 +74,7 @@ export default function App() {
         }
     }, [game]);
 
-    // === EVENT HANDLERS ===
+    // EVENT HANDLERS
     // This function is called when a cell button is clicked.
     function handleCellClick(i: number): void {
         // We update the game state by calling the immutable 'makeMove' method.
@@ -91,14 +91,14 @@ export default function App() {
         setRulesOpen(true);
     }
 
-    // === JSX (RENDERING) ===
+    // JSX (RENDERING)
     // This describes the HTML structure of our application.
     return (
         <div className="min-h-screen flex flex-col bg-[#171717] text-[#F8FAFC]">
             {/* Rules panel (shown when rulesOpen == true) */}
             <RulesPanel open={rulesOpen} onClose={() => setRulesOpen(false)}>
                 {/* Rules */}
-                <ul className="list-disc pl-5 space-y-1 text-[14px] md:text-[16px] lg:text-[20px] leading-6">
+                <ul className="list-disc pl-5 space-y-1 text-sm md:text-base lg:text-lg leading-6">
                     <li>You play as <strong>X</strong> and always goes first.</li>
                     <li>Players take turns placing <strong>X</strong> and <strong>O</strong> in empty cells.</li>
                     <li><strong>O</strong> is controlled by an AI using the <strong>Minimax algorithm</strong> and cannot be beaten.</li>
@@ -110,7 +110,7 @@ export default function App() {
 
             {/* Header Section */}
             <header className="flex justify-between items-center px-4 sm:px-8 mt-4">
-                <p className="text-[24px] xs:text-[28px] sm:text-[32px] md:text-[48px] lg:text-[64px] font-semibold">
+                <p className="font-semibold text-[clamp(1.5rem,5vw,4rem)]">
                     Tic Tac Toe
                 </p>
 
@@ -122,7 +122,7 @@ export default function App() {
             <main className="flex flex-1 justify-center items-center">
                 <div className="flex flex-col items-center">
                     {/* Game Status Display */}
-                    <div className="font-semibold text-[24px] xs:text-[28px] sm:text-[32px] md:text-[36px] lg:text-[40px] mb-4">
+                    <div className="font-semibold text-[clamp(1.5rem,4vw,2.5rem)] mb-4">
                         {status}
                     </div>
 
@@ -130,15 +130,15 @@ export default function App() {
                     <BoardView
                         cells={game.board.getBoard()}
                         onCellClick={handleCellClick}
-                        disabled={over || isThinking} // Disable the board while AI is thinking
+                        disabled={over || isThinking} // Disable the board while AI is thinking or while game is over
                     />
 
                     {/* Game Controls (Reset Button) */}
-                    <div className="mt-6 w-full max-w-[520px]">
+                    <div className="mt-6 w-full max-w-lg">
                         <div className="flex justify-center">
                             <button
                                 onClick={handleReset}
-                                className="rounded p-1 px-2 font-semibold text-[12px] xs:text-[16px] sm:text-[18px] md:text-[20px] lg:text-[22px] text-[#171717] bg-[#F8FAFC]  hover:opacity-65 duration-300 cursor-pointer"
+                                className="rounded p-1 px-2 font-semibold text-xs xs:text-base sm:text-lg md:text-xl text-[#171717] bg-[#F8FAFC]  hover:opacity-65 duration-300 cursor-pointer"
                             >
                                 Reset Board
                             </button>
@@ -146,7 +146,7 @@ export default function App() {
                     </div>
 
                     {/* Scoreboard Section */}
-                    <div className="mt-8 w-full max-w-[520px]">
+                    <div className="mt-8 w-full max-w-lg">
                         <div className="grid grid-cols-3 gap-4">
                             <ScoreCard label="Player (X)" value={scores.X} />
                             <ScoreCard label="Tie" value={scores.Ties} />
@@ -157,7 +157,7 @@ export default function App() {
             </main>
 
             {/* Footer Section */}
-            <footer className="text-center py-4 text-[16px] xs:text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] font-semibold">
+            <footer className="text-center py-4 text-base xs:text-lg sm:text-xl md:text-2xl font-semibold">
                 Ellmaer Ranjber
             </footer>
         </div>
@@ -168,10 +168,10 @@ export default function App() {
 function ScoreCard({ label, value }: { label: string; value: number }) {
     return (
         <div className="flex flex-col items-center px-2 sm:px-4 py-3">
-            <div className="text-[16px] xs:text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] font-semibold">
+            <div className="text-base xs:text-lg sm:text-xl md:text-2xl font-semibold">
                 {label}
             </div>
-            <div className="text-[16px] xs:text-[18px] sm:text-[20px] md:text-[22px] lg:text-[24px] font-semibold mt-1">
+            <div className="text-base xs:text-lg sm:text-xl md:text-2xl font-semibold mt-1">
                 {value}
             </div>
         </div>
@@ -190,15 +190,14 @@ type BoardViewProps = {
  * It receives its data and functions via props from the parent App component.
  */
 function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
-    // Base CSS classes for all cells. The main page background color is now applied here.
     const base =
         "flex items-center justify-center select-none cursor-pointer bg-[#171717] " +
-        "text-[48px] xs:text-[60px] sm:text-[72px] md:text-[84px] lg:text-[96px]";
+        "text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl ";
 
     // The border logic is now handled by the grid container using 'gap' and a background color.
     // This creates perfectly centered grid lines.
     return (
-        <div className="grid grid-cols-3 grid-rows-3 w-[280px] h-[280px] xs:w-[360px] xs:h-[360px] sm:w-[420px] sm:h-[420px] md:w-[460px] md:h-[460px] lg:w-[500px] lg:h-[500px] font-semibold bg-[#F8FAFC] gap-[6px] sm:gap-[8px]">
+        <div className="grid grid-cols-3 grid-rows-3 w-72 h-72 xs:w-80 xs:h-80 sm:w-96 sm:h-96 md:w-[28rem] md:h-[28rem] lg:w-[32rem] lg:h-[32rem] font-semibold bg-[#F8FAFC] gap-1.5 sm:gap-2">
             {cells.map((value, i) => (
                 <button
                     key={i} // A unique key for each item in a list, required by React.
@@ -218,7 +217,7 @@ function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
 function RulesView({ rules }: { rules: () => void }) {
     return (
         <button
-            className="text-[18px] xs:text-[20px] sm:text-[24px] md:text-[28px] lg:text-[32px] font-semibold underline hover:opacity-65  duration-300 cursor-pointer"
+            className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-semibold underline hover:opacity-65  duration-300 cursor-pointer"
             onClick={rules}
         >
             Rules
@@ -289,13 +288,13 @@ function RulesPanel({ open, onClose, children }: RulesPanelProps) {
                 <header className="flex items-center justify-between p-4 border-b">
                     <h2
                         id="rules-title"
-                        className="text-[20px] md:text-[22px] lg:text-[24px] font-semibold"
+                        className="text-xl md:text-2xl font-semibold"
                     >
                         Rules
                     </h2>
                     <button onClick={onClose} aria-label="Close rules panel">
                         <svg
-                            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 hover:opacity-50 transform duration-300 cursor-pointer"
+                            className="w-5 h-5 md:w-6 md:h-6 hover:opacity-50 transform duration-300 cursor-pointer"
                             version="1.1"
                             id="Capa_1"
                             xmlns="http://www.w3.org/2000/svg"
