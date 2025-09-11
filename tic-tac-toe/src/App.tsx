@@ -191,17 +191,23 @@ type BoardViewProps = {
  */
 function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
     const base =
-        "flex items-center justify-center select-none cursor-pointer bg-[#171717] " +
+        "flex items-center justify-center select-none cursor-pointer " +
         "text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl ";
 
-    // The border logic is now handled by the grid container using 'gap' and a background color.
-    // This creates perfectly centered grid lines.
+    // A helper function to dynamically add border classes to each cell.
+    function cellBorders(i: number): string {
+        let classes = "border-white";
+        if (i % 3 !== 2) classes += " border-r-[6px] sm:border-r-[8px]"; // Add right border unless it's the last column.
+        if (i < 6) classes += " border-b-[6px] sm:border-b-[8px]"; // Add bottom border unless it's the last row.
+        return classes;
+    }
+
     return (
-        <div className="grid grid-cols-3 grid-rows-3 w-72 h-72 xs:w-80 xs:h-80 sm:w-96 sm:h-96 md:w-[28rem] md:h-[28rem] lg:w-[32rem] lg:h-[32rem] font-semibold bg-[#F8FAFC] gap-1.5 sm:gap-2">
+        <div className="grid grid-cols-3 grid-rows-3 w-72 h-72 xs:w-80 xs:h-80 sm:w-96 sm:h-96 md:w-[28rem] md:h-[28rem] lg:w-[32rem] lg:h-[32rem] font-semibold">
             {cells.map((value, i) => (
                 <button
                     key={i} // A unique key for each item in a list, required by React.
-                    className={base} // The base classes are applied directly. No more border logic here.
+                    className={`${base} ${cellBorders(i)}`} 
                     onClick={() => onCellClick(i)} // When clicked, call the function passed from App.
                     disabled={disabled || value !== null} // Disable button if game is over or cell is filled.
                     aria-label={`Cell ${i + 1}`}
