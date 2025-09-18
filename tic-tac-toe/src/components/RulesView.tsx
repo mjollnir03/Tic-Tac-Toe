@@ -1,4 +1,4 @@
-/* A simple presentational component for the "Rules" button. */
+// A simple presentational component for the "Rules" button.
 export default function RulesView({ rules }: { rules: () => void }) {
     return (
         <button

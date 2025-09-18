@@ -1,9 +1,8 @@
+// TYPE DEFINITIONS
 export type Player = "X" | "O";
-
 export type Cell = Player | null;
 
-// This is a constant array holding all 8 possible winning combinations.
-// Each inner array contains the three cell indices that form a winning line.
+// A constant array of all 8 possible winning combinations of cell indices.
 const WIN_LINES: [number, number, number][] = [
     [0, 1, 2],
     [3, 4, 5],
@@ -15,18 +14,14 @@ const WIN_LINES: [number, number, number][] = [
     [2, 4, 6], // diags
 ];
 
-/*
- * Represents the 3x3 Tic-Tac-Toe board.
- * This class is immutable, meaning its methods don't change the board's state;
- * instead, they return a new Board instance with the updated state.
- */
+// Represents the state of the 3x3 Tic-Tac-Toe board.
+// This class is immutable: its methods return a new Board instance with the updated state, rather than changing the original one.
 export class Board {
-    // A private, read-only array representing the 9 cells of the grid.
+    // A private array representing the 9 cells of the grid.
     private readonly cells: ReadonlyArray<Cell>;
 
     constructor(cells?: ReadonlyArray<Cell>) {
-        // If an array of cells is provided, clone it for the new board.
-        // Otherwise, create a new board with 9 empty (null) cells.
+        // If an array of cells is provided, use it. Otherwise, create an empty board.
         if (cells) {
             this.cells = [...cells];
         } else {
@@ -34,12 +29,12 @@ export class Board {
         }
     }
 
-    // Returns a read-only version of the board's cells.
+    // Returns the current state of the board's cells.
     getBoard(): ReadonlyArray<Cell> {
         return this.cells;
     }
 
-    // Returns the value of a single cell at a given index.
+    // Returns the value of a cell at a given index.
     getCell(i: number): Cell {
         return this.cells[i];
     }
@@ -66,13 +61,13 @@ export class Board {
             const [first, second, third] = line;
             const firstCell: Cell = this.cells[first];
 
-            // If the first cell isn't empty and all three cells in the line match...
+            // If the first cell isn't empty and all three cells in the line match.
             if (
                 firstCell &&
                 firstCell === this.cells[second] &&
                 firstCell === this.cells[third]
             ) {
-                // ...we have a winner! Return the player ('X' or 'O').
+                // Found a winner.
                 return firstCell;
             }
         }
@@ -80,11 +75,7 @@ export class Board {
         return null;
     }
 
-    /*
-     * Places a player's mark on the board.
-     * This is an immutable operation: it returns a NEW board with the move applied.
-     * If the move is illegal (cell not empty), it returns the same, unchanged board.
-     */
+    // Places a player's mark on the board.
     placeMark(i: number, player: Player): Board {
         if (!this.isCellEmpty(i)) return this; // Return original board if cell is taken.
         const nextCells = [...this.cells]; // Create a copy of the cells array.
@@ -92,7 +83,7 @@ export class Board {
         return new Board(nextCells); // Return a new Board instance with the copied array.
     }
 
-    // Finds all empty cells on the board and returns their indexes.
+    // Returns an array of indices for all empty cells.
     getEmptyIndices(): number[] {
         const result: number[] = [];
         for (let i = 0; i < 9; i++) {

@@ -1,18 +1,19 @@
 import type { Cell } from "../game/board";
 
-// Defines the "props" (properties) that the BoardView component expects to receive.
+// Defines the props that the BoardView component accepts.
 type BoardViewProps = {
-    cells: ReadonlyArray<Cell>;
-    onCellClick: (i: number) => void;
-    disabled: boolean;
+    cells: ReadonlyArray<Cell>; // The 9 cells of the board.
+    onCellClick: (i: number) => void; // Function to call when a cell is clicked.
+    disabled: boolean; // Disables the board buttons when true.
 };
 
-/*
- * A "presentational" component responsible for rendering the 3x3 grid.
- * It receives its data and functions via props from the parent App component.
- */
-export default function BoardView({ cells, onCellClick, disabled }: BoardViewProps) {
-    const base =
+// A presentational component responsible for rendering the 3x3 game board grid.
+export default function BoardView({
+    cells,
+    onCellClick,
+    disabled,
+}: BoardViewProps) {
+    const baseCellStyles =
         "flex items-center justify-center select-none cursor-pointer text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-9xl select-none ";
 
     // A helper function to add border classes to each cell.
@@ -34,13 +35,14 @@ export default function BoardView({ cells, onCellClick, disabled }: BoardViewPro
             case 2:
                 baseClasses += borderBottom + borderLeft;
                 break;
-            
+
             // Middle Row
             case 3:
                 baseClasses += borderTop + borderRight + borderBottom;
                 break;
             case 4:
-                baseClasses += borderTop + borderRight + borderBottom + borderLeft;
+                baseClasses +=
+                    borderTop + borderRight + borderBottom + borderLeft;
                 break;
             case 5:
                 baseClasses += borderTop + borderBottom + borderLeft;
@@ -60,7 +62,7 @@ export default function BoardView({ cells, onCellClick, disabled }: BoardViewPro
             default:
                 break;
         }
-        
+
         return baseClasses;
     }
 
@@ -69,9 +71,10 @@ export default function BoardView({ cells, onCellClick, disabled }: BoardViewPro
             {cells.map((value, i) => (
                 <button
                     key={i} // A unique key for each item in a list, required by React.
-                    className={`${base} ${cellBorders(i)}`} 
-                    onClick={() => onCellClick(i)} // When clicked, call the function passed from App.
-                    disabled={disabled || value !== null} // Disable button if game is over or cell is filled.
+                    className={`${baseCellStyles} ${cellBorders(i)}`}
+                    onClick={() => onCellClick(i)}
+                    // A cell is disabled if the game is over or the cell is not empty.
+                    disabled={disabled || value !== null}
                     aria-label={`Cell ${i + 1}`}
                 >
                     {value}

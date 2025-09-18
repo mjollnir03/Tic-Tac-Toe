@@ -1,9 +1,7 @@
-import {type Cell, Board, type Player} from "./board"
+import { type Cell, Board, type Player } from "./board";
 
-/*
- * Manages the overall state and logic of the game.
- * This class is also immutable. Methods like makeMove return a new Game instance.
- */
+// Manages over game state and logic, including turns and AI moves.
+// This class is immutable: methods return a new Game instance with updated state, rather than changing original instance.
 export class Game {
     readonly board: Board; // The current state of the board.
     readonly turn: Player; // The player whose turn it is.
@@ -18,44 +16,41 @@ export class Game {
         return this.board.winner();
     }
 
-    // A "getter" to determine if the game has concluded (either by a win or a draw).
+    // A "getter" to determine if the game is over (either by a win or a draw).
     get isOver(): boolean {
         return this.winner !== null || this.board.isFull();
     }
 
-    /*
-     * Processes a player's move.
-     * Returns a NEW Game instance representing the state after the move.
-     * If the move is illegal, it returns the same, unchanged game instance.
-     */
+    // Processes a player's move.
+    // i is the index of the cell to place a mark (0-8).
+    // returns a new Game instance with the updated state.
     makeMove(i: number): Game {
-        // Guard clauses: Do nothing if the game is over or the cell is already taken.
+        // If the game is over or the cell is already taken, do nothing.
         if (this.isOver || !this.board.isCellEmpty(i)) return this;
 
-        // Create the next board state by placing the current player's mark.
         const nextBoard = this.board.placeMark(i, this.turn);
-        // Determine the next player's turn.
         const nextTurn: Player = this.turn === "X" ? "O" : "X";
-        // Return a new Game instance with the updated board and turn.
         return new Game(nextBoard, nextTurn);
     }
 
-    /* Returns a fresh game with an empty board, with 'X' starting. */
+    // Creates a new game instance with an empty board.
     reset(): Game {
         return new Game(new Board(), "X");
     }
 
-    // Finds the best move for the AI by checking all empty spots and
-    // scoring them with the minimax algorithm.
+    // Finds the best move for the AI using the minimax algorithm.
     private getBestMove(): number {
+        // A small helper type to store an index and the resulting board after placing O.
         type generated_Game_States = {
             indexPlaced: number;
             newGameBoard: Board;
         };
 
+        // Get all currently empty cells on the board.
         const emptyCellIndexes = this.board.getEmptyIndices();
         let states: generated_Game_States[] = [];
 
+        // For each empty cell, simulate placing O and store the resulting board state.
         for (const idx of emptyCellIndexes) {
             let temp: generated_Game_States = {
                 indexPlaced: idx,
@@ -64,35 +59,36 @@ export class Game {
             states.push(temp);
         }
 
+        // Track the highest score found so far and the index that produced it.
         let maxVal = -Infinity;
         let optimalIdx = states[0].indexPlaced;
 
-        // Iterate through all possible next moves.
+        // Check each possible move generated above.
         for (const state of states) {
-            // Get the score for this move from the minimax function.
+            // Use minimax to score the resulting board.
             const val = this.minimax(
                 state.newGameBoard,
                 state.newGameBoard.getEmptyIndices().length,
-                false
+                false // false because after O, it's the minimizing player's turn.
             );
 
-            // If this move has a better score than what we've seen so far, save it.
+            // If this move's score is better than our best so far, update.
             if (val > maxVal) {
                 maxVal = val;
                 optimalIdx = state.indexPlaced;
             }
         }
 
+        // Return the index of the move with the best score.
         return optimalIdx;
     }
 
-    // Tells the AI to find its best move and then plays it.
+    // Makes a move for the AI by finding the optimal spot.
     makeAIMove(): Game {
         return this.makeMove(this.getBestMove());
     }
 
-    // The Minimax algorithm recursively scores moves. High scores are good for
-    // the AI, low scores are good for the player.
+    // The Minimax algorithm, which recursively explores possible game outcomes to find the optimal move.
     private minimax(
         currentBoard: Board,
         depth: number,
@@ -107,10 +103,10 @@ export class Game {
 
         const positions = currentBoard.getEmptyIndices();
 
-        // If it's the AI's turn to think (maximizing player)...
+        // If it's the AI's turn (maximizing player)...
         if (maximizingPlayer) {
             let maxVal = -Infinity;
-            // ...find the move that results in the highest score.
+            // Try all possible moves for O and take the one with the highest score.
             for (const idx of positions) {
                 const child = currentBoard.placeMark(idx, "O");
                 const val = this.minimax(child, depth - 1, false);
@@ -118,10 +114,10 @@ export class Game {
             }
             return maxVal;
         }
-        // If it's the player's turn to think (minimizing player)...
+        // If it's the player's turn (minimizing player
         else {
             let minVal = +Infinity;
-            // ...find the move that results in the lowest score.
+            // Try all possible moves for X and take the one with the lowest score.
             for (const idx of positions) {
                 const child = currentBoard.placeMark(idx, "X");
                 const val = this.minimax(child, depth - 1, true);
