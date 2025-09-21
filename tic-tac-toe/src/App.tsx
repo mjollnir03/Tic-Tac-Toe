@@ -167,9 +167,6 @@ export default function App() {
                 </div>
             </main>
 
-            <footer className="text-center py-4 text-base xs:text-lg sm:text-xl md:text-2xl font-semibold">
-                Ellmaer Ranjber
-            </footer>
         </div>
     );
 }

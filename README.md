@@ -16,7 +16,7 @@ You can try out the **live version of the website** here:
 ## Website Demo
 
 <p align="center">
-  <img src="./assets/desktop.png" alt="Desktop view" width="80%"/>
+  <img src="./assets/desktop.png" alt="Desktop view" width="95%"/>
 </p>
 
 <p align="center">
