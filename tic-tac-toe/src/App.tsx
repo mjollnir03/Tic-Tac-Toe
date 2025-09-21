@@ -96,7 +96,7 @@ export default function App() {
 
     // RENDERING
     return (
-        <div className="min-h-screen flex flex-col bg-[#171717] text-[#F8FAFC]">
+        <div className="min-h-screen flex flex-col text-[#F8FAFC]">
             <RulesPanel open={rulesOpen} onClose={() => setRulesOpen(false)}>
                 <ul className="list-disc pl-5 space-y-1 text-sm md:text-base lg:text-lg leading-6">
                     <li>
